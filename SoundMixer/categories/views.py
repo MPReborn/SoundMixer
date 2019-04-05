@@ -4,6 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 from random import randint
+from django.db.models import Count
 
 from .forms import SongForm, SearchForm, TagForm, AddTagForm
 
@@ -18,7 +19,7 @@ def getrandomsongid(song_id_list):
     return real_list[rand_id]
 
 def taglist(request):
-    tag_list = Category.objects.all()
+    tag_list = Category.objects.annotate(s_count=Count('song')).order_by('-s_count')
     context = {
         'tag_list': tag_list,
     }
