@@ -2,8 +2,9 @@
 
 {% block body %}
   {% if random_song and song_id_list %}
-    <b><a href="{% url 'categories:song' random_song.id song_id_list %}"> Play random song </a></b><br><br>
+    <b><a href="{% url 'categories:song' random_song.id song_id_list %}"> Play random song </a></b><br>
   {% endif %}
+  <h3>Songs:</h3>
   {% if song_list %}
     <ul>
       {% for song in song_list %}
