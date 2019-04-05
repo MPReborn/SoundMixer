@@ -1,3 +1,14 @@
-Welcome to Soundmixer!<br><br>
+<h1>Welcome to the DnD Playlist Machine</h1><br>
+
+<a href="{% url 'categories:tag_list' %}"> Home</a> •
+<a href="{% url 'categories:submit_song' %}"> Submit Song</a> •
+<a href="{% url 'categories:submit_tag' %}"> Submit Tag</a> •
+{% if user.is_superuser %}
+  <a href="/admin"> Admin</a> •
+{% endif %}
+<a href="{% url 'categories:search' %}"> Search</a>
+
+
+<br><br>
 
 {% block body %}{% endblock %}

@@ -8,10 +8,10 @@ def validate_tag(value):
     # determines if a fraction name is a real fraction
     # or a bunch of gibberish
     try:
-        Category.objects.get(name = value)
+        Category.objects.get(name= value.lower())
     except:
         raise ValidationError(
-            gettext_lazy('/f/%(value)s is not a valid tag'),
+            gettext_lazy('%(value)s is not a valid tag'),
             params={'value': value},
         )
 
@@ -39,6 +39,10 @@ class LinkField(forms.CharField):
         info = components[-1].split('&')
         return info[0]
 
+class LowerCharField(forms.CharField):
+    def to_python(self, value):
+        return value.lower()
+
 class SongForm(forms.Form):
     #used to make a new post in the text_post view
     name = forms.CharField(label = 'Post Title', max_length = 280)
@@ -48,3 +52,6 @@ class SongForm(forms.Form):
 class SearchForm(forms.Form):
     include = TagField(label = 'Must include:', max_length = 1000, required=False)
     exclude = TagField(label = 'Can\'t have', max_length = 1000, required=False)
+
+class TagForm(forms.Form):
+    tag = LowerCharField(label = 'Tag name', max_length = 30)

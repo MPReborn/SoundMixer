@@ -1,0 +1,16 @@
+{% extends "SoundMixer/base.html" %}
+
+{% block body %}
+  Hey, you found me!<br>
+  I'm imported from another project and I can't be assed to set it up<br>
+  This might come in handy later, if someone spams the lists and we need registration<br>
+  {% if user.is_authenticated %}
+    You're already signed up. <a href="{% url 'logout' %}"> Click here to log out.</a>
+  {% else %}
+    <form action="{% url 'categories:signup' %}" method="post" >
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Sign Up">
+    </form>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends "SoundMixer/base.html" %}
+
+{% block body %}
+  {% if form.errors %}
+    <p>Your username and password didn't match. Please try again.</p>
+  {% endif %}
+
+  {% if next %}
+    {% if user.is_authenticated %}
+      <p>Your account doesn't have access to this page. To proceed,
+      please login with an account that has access.</p>
+    {% else %}
+      <p>Please login to see this page.</p>
+    {% endif %}
+  {% endif %}
+
+  Hey, you found me!<br>
+  I'm imported from another project and I can't be assed to set it up.<br>
+  You don't need to login for anything right now.<br>
+
+  <form action="{% url 'login' %}" method="post" >
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Log In">
+  </form>
+{% endblock %}

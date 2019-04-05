@@ -1,7 +1,10 @@
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
+from django.contrib.auth.forms import UserCreationForm
+from django.urls import reverse_lazy
+from django.views import generic
 
-from .forms import SongForm, SearchForm
+from .forms import SongForm, SearchForm, TagForm
 
 from .models import Category, Song
 
@@ -47,8 +50,6 @@ def song(request, song_id):
     return render(request, 'categories/song.html', context)
 
 def submitsong(request):
-    # every time someone submits the text_post form the view re-loads.
-    # The if statement is determining if there was form data submitted with the view
     if (request.method == "POST"):
         form = SongForm(request.POST)
         if form.is_valid():
@@ -60,8 +61,27 @@ def submitsong(request):
             for tag in form.cleaned_data['tags']:
                 new_song.tags.add(Category.objects.get(name= tag))
             new_song.save()
-            #currently returns to the main page. todo: re-route to the post page
+            #currently returns to the main page.
             return HttpResponseRedirect('/')
     else:
         form = SongForm()
     return render(request, 'categories/submit_song.html', { 'form': form })
+
+def submittag(request):
+    if (request.method == "POST"):
+        form = TagForm(request.POST)
+        if form.is_valid():
+            new_tag = Category(
+                name = form.cleaned_data['tag'],
+                )
+            new_tag.save()
+            #currently returns to the main page.
+            return HttpResponseRedirect('/')
+    else:
+        form = TagForm()
+    return render(request, 'categories/submit_tag.html', { 'form': form })
+
+class signup(generic.CreateView):
+    form_class = UserCreationForm
+    success_url = reverse_lazy('login')
+    template_name = 'categories/signup.html'
