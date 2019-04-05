@@ -3,10 +3,19 @@ from django.shortcuts import render
 from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
+from random import randint
 
 from .forms import SongForm, SearchForm, TagForm, AddTagForm
 
 from .models import Category, Song
+
+def getrandomsongid(song_id_list):
+    #this 'list' is a string so we have to process it a bit first
+    song_id_list = song_id_list.replace("[", "")
+    song_id_list = song_id_list.replace("]", "")
+    real_list = song_id_list.split(',')
+    rand_id = randint(0, len(real_list) - 1)
+    return real_list[rand_id]
 
 def taglist(request):
     tag_list = Category.objects.all()
@@ -16,9 +25,17 @@ def taglist(request):
     return render(request, 'categories/tags.html', context)
 
 def songlist(request, songquerry):
+    song_id_list = []
+    for song in songquerry:
+        song_id_list.append(song.id)
     context = {
         'song_list': songquerry,
     }
+    if song_id_list:
+        random_song_id = getrandomsongid(str(song_id_list))
+        random_song = Song.objects.get(id = random_song_id)
+        context['song_id_list'] = song_id_list
+        context['random_song'] = random_song
     return render(request, 'categories/list.html', context)
 
 def gettagsongs(request, tag_name):
@@ -42,8 +59,12 @@ def search(request):
         form = SearchForm()
     return render(request, 'categories/search.html', { 'form': form })
 
-def song(request, song_id):
+
+def song(request, song_id, song_id_list = ''):
     song = Song.objects.get(id=song_id)
+    if song_id_list:
+        random_song_id = getrandomsongid(song_id_list)
+        random_song = Song.objects.get(id = random_song_id)
     if (request.method == "POST"):
         form = AddTagForm(request.POST)
         if form.is_valid():
@@ -56,6 +77,9 @@ def song(request, song_id):
         'song': song,
         'form': form,
     }
+    if song_id_list:
+        context['song_id_list'] = song_id_list
+        context['random_song'] = random_song
     return render(request, 'categories/song.html', context)
 
 def submitsong(request):

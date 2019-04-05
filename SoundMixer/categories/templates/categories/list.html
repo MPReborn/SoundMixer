@@ -1,10 +1,13 @@
 {% extends "SoundMixer/base.html" %}
 
 {% block body %}
+  {% if random_song and song_id_list %}
+    <b><a href="{% url 'categories:song' random_song.id song_id_list %}"> Play random song </a></b><br><br>
+  {% endif %}
   {% if song_list %}
     <ul>
       {% for song in song_list %}
-        <li><b><a href="{% url 'categories:song' song.id %}">{{ song.name }}</a></b><br>
+        <li><b><a href="{% url 'categories:song' song.id song_id_list %}">{{ song.name }}</a></b><br>
         </li>
       {% endfor %}
     </ul>

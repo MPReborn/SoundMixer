@@ -1,10 +1,13 @@
 {% extends "SoundMixer/base.html" %}
 
 {% block body %}
-  name: {{ song.name }}<br>
+  {% if random_song and song_id_list %}
+    <b><a href="{% url 'categories:song' random_song.id song_id_list %}"> Play random song from previous page</a></b><br><br>
+  {% endif %}
+  name: {{ song.name }}<br><br>
   <iframe width="560"
     height="315"
-    src="https://www.youtube.com/embed/{{ song.link }}"
+    src="https://www.youtube.com/embed/{{ song.link }}?autoplay=1"
     frameborder="0"
     allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
     allowfullscreen></iframe><br>
@@ -12,9 +15,17 @@
   {% for tag in song.tags.all %}
     <a href="{% url 'categories:get_tag_songs' tag.name %}">{{ tag.name }}<br></a>
   {% endfor %}
-  <form action="{% url 'categories:song' song.id %}" method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Done">
-  </form>
+  {% if song_id_list %}
+    <form action="{% url 'categories:song' song.id song_id_list %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Done">
+    </form>
+  {% else %}
+    <form action="{% url 'categories:song' song.id %}" method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Done">
+    </form>
+  {% endif %}
 {% endblock %}
