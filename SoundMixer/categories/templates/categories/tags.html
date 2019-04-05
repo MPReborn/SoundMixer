@@ -4,7 +4,7 @@
   {% if tag_list %}
     <ul>
       {% for tag in tag_list %}
-        <li><b><a href="{% url 'categories:songlist' tag.id %}">{{ tag.name }}</a></b><br>
+        <li><b><a href="{% url 'categories:get_tag_songs' tag.name %}">{{ tag.name }}</a></b><br>
         </li>
       {% endfor %}
     </ul>

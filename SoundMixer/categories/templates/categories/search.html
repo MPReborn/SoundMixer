@@ -1,0 +1,9 @@
+{% extends "SoundMixer/base.html" %}
+
+{% block body %}
+  <form action="{% url 'categories:search' %}" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Done">
+  </form>
+{% endblock %}

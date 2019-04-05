@@ -5,7 +5,8 @@ from . import views
 app_name = 'categories'
 urlpatterns = [
     path('', views.taglist, name='tag_list'),
-    path('tag/<int:tag_id>', views.songlist, name="songlist"),
+    path('tag/<str:tag_name>', views.gettagsongs, name="get_tag_songs"),
     path('song/<int:song_id>', views.song, name="song"),
-    #path('f/<str:tag_name>', views.FractionSortNew, name='fraction_sort_new')
+    path('submit/', views.submitsong, name="submit_song"),
+    path('search/', views.search, name="search"),
 ]
