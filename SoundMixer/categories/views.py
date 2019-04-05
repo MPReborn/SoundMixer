@@ -4,7 +4,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.views import generic
 
-from .forms import SongForm, SearchForm, TagForm
+from .forms import SongForm, SearchForm, TagForm, AddTagForm
 
 from .models import Category, Song
 
@@ -44,8 +44,17 @@ def search(request):
 
 def song(request, song_id):
     song = Song.objects.get(id=song_id)
+    if (request.method == "POST"):
+        form = AddTagForm(request.POST)
+        if form.is_valid():
+            for tag in form.cleaned_data['tags']:
+                song.tags.add(Category.objects.get(name= tag))
+            song.save()
+    else:
+        form = AddTagForm()
     context = {
         'song': song,
+        'form': form,
     }
     return render(request, 'categories/song.html', context)
 

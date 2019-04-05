@@ -21,6 +21,7 @@ class TagField(forms.CharField):
         # Return an empty list if no input was given.
         if not value:
             return []
+        value = value.lower()
         t_list = value.split(',')
         # eliminates any whitespace on the begining or end of a fraction name.
         t_list = [x.strip() for x in t_list]
@@ -47,7 +48,7 @@ class SongForm(forms.Form):
     #used to make a new post in the text_post view
     name = forms.CharField(label = 'Post Title', max_length = 280)
     link = LinkField(label = 'Post link', max_length = 50)
-    tags = TagField(label = 'List tags seperated by a comma', max_length = 1000)
+    tags = TagField(label = 'List tags (seperated by a comma)', max_length = 1000)
 
 class SearchForm(forms.Form):
     include = TagField(label = 'Must include:', max_length = 1000, required=False)
@@ -55,3 +56,6 @@ class SearchForm(forms.Form):
 
 class TagForm(forms.Form):
     tag = LowerCharField(label = 'Tag name', max_length = 30)
+
+class AddTagForm(forms.Form):
+    tags = TagField(label = 'Add more tags', max_length = 1000)
